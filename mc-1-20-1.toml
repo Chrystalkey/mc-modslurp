@@ -6,7 +6,7 @@ launcher = "1.0.1"
 
 
 [mods]
-alternatecurrent = { link = "https://cdn.modrinth.com/data/r0v8vy1s/versions/kC6SY4Zp/alternate_current-mc1.20-1.7.0.jar", version = "1.7.0", server = true, client = false }
+alternate-current = { link = "https://cdn.modrinth.com/data/r0v8vy1s/versions/TGC7Ch3w/alternate-current-mc1.20-1.8.0-beta.4.jar", version = "1.7.0", server = true, client = false }
 autoplantcrops = { link = "https://cdn.modrinth.com/data/EnpfhLw4/versions/Zv8JtIqN/auto-plant-crops-1.3.jar", version = "1.3", server = true, client = false }
 balm-fabric = { link = "https://cdn.modrinth.com/data/MBAkmtvl/versions/YGxMJ2Hv/balm-fabric-1.20.1-7.3.6.jar", version = "21.0.14", server = true, client = false }
 bluemap = { link = "https://cdn.modrinth.com/data/swbUV1cr/versions/lHRktt6S/BlueMap-5.3-fabric-1.20.jar", version = "5.3", server = true, client = false }
@@ -33,3 +33,30 @@ krypton = { link = "https://cdn.modrinth.com/data/fQEb0iXm/versions/jiDwS0W1/kry
 puzzleslib = { link = "https://cdn.modrinth.com/data/QAGBst4M/versions/xjQF8bha/PuzzlesLib-v8.1.21-1.20.1-Fabric.jar", version = "8.1.21", server = true, client = true }
 sodium = { link = "https://cdn.modrinth.com/data/AANobbMI/versions/ygf8cVZg/sodium-fabric-0.5.11%2Bmc1.20.1.jar", version = "0.5.11", server = false, client = true }
 yetanotherconfiglib = { link = "https://cdn.modrinth.com/data/1eAoo2KR/versions/gQuF6HNa/YetAnotherConfigLib-3.5.0%2B1.20.1-fabric.jar", version = "3.5.0", server = true, client = true }
+
+pehkui = { link = "https://cdn.modrinth.com/data/t5W7Jfwy/versions/ooQsxSVg/Pehkui-3.7.8%2B1.14.4-1.20.1.jar", version = "3.7.8", server = true, client = true }
+player-animator = { link = "https://cdn.modrinth.com/data/gedNE4y2/versions/pimBqcCZ/player-animation-lib-fabric-1.0.2-rc1%2B1.20.4.jar", version = "1.0.2-rc1", server = true, client = true }
+spellpower-attributes = { link = "https://cdn.modrinth.com/data/8ooWzSQP/versions/nT0Hl1AE/spell_power-0.11.1%2B1.20.1.jar", version = "0.11.1", server = true, client = true }
+trinkets = { link = "https://cdn.modrinth.com/data/5aaWibi9/versions/AHxQGtuC/trinkets-3.7.2.jar", version = "3.7.2", server = true, client = true }
+spell-engine = { link = "https://cdn.modrinth.com/data/XvoWJaA2/versions/eX4YqiVK/spell_engine-0.15.8%2B1.20.1.jar", version = "0.15.8", server = true, client = true, depends_on = [
+    "fabric-api",
+    "cloth-config-api",
+    "trinkets",
+    "player-animator",
+    "spellpower-attributes",
+] }
+origins = { link = "https://cdn.modrinth.com/data/3BeIrqZR/versions/OdNHB7Bh/Origins-1.20.1-1.10.0.jar", version = "1.10.0", server = true, client = true, depends_on = [
+    "pehkui",
+] }
+medieval-origins-revival = { link = "https://cdn.modrinth.com/data/3FJ8AhW0/versions/goRtT5Tq/MedievalOriginsRevival-6.4.5%2B1.20.1-fabric.jar", version = "6.4.5", server = true, client = true, depends_on = [
+    "origins",
+    "spell-engine",
+] }
+origins-classes = { link = "https://cdn.modrinth.com/data/FiDptjtR/versions/EnGfmh9y/Origins-Classes-1.20-1.7.0.jar", version = "1.7.0", server = true, client = true }
+
+another-furniture = {link = "https://cdn.modrinth.com/data/ulloLmqG/versions/YKKY0UDo/another_furniture-fabric-1.20.1-3.0.1.jar", version = "3.0.1", server = true, client = true}
+farmers-delight = {link = "https://cdn.modrinth.com/data/7vxePowz/versions/5dZdVy3m/FarmersDelight-1.20.1-2.1.1%2Brefabricated.jar", version = "2.1.1", server = true, client = true}
+brewin-n-chewin = {link = "https://cdn.modrinth.com/data/e4G0uSdm/versions/ZieRTW8y/brewinandchewin-3.0.6%2B1.20.1.jar", version = "3.0.6", server = true, client = true, depends_on =["farmers-delight"]}
+macaws-furniture = {link = "https://modrinth.com/mod/macaws-furniture/version/oj2le2W6", version = "3.2.2", server = true, client = true}
+
+just-enough-items = {link = "https://cdn.modrinth.com/data/u6dRKJwZ/versions/g55mIBsI/jei-1.20.1-fabric-15.8.0.18.jar", version = "15.8.0.18", server = false, client = true}

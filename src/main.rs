@@ -1,13 +1,15 @@
 use anyhow::Result;
 use clap::Parser;
 use serde::Deserialize;
+use sevenz_rust::{self, SevenZWriter};
 use std::fs;
 use std::{collections::HashMap, path::PathBuf};
-use sevenz_rust::{self, SevenZWriter};
 
 #[derive(Parser, Debug)]
 struct InputArguments {
     config: String,
+    #[arg(long, short)]
+    compress: Option<bool>,
 }
 
 #[allow(dead_code)]
@@ -16,6 +18,7 @@ struct Mod {
     link: String,
     server: bool,
     client: bool,
+    depends_on : Option<Vec<String>>
 }
 #[allow(dead_code)]
 #[derive(Debug, Deserialize)]
@@ -31,7 +34,11 @@ struct ConfigFile {
     info: Info,
 }
 
-fn download_file(link: String, output_directory: &PathBuf, file: Option<String>) -> Result<PathBuf> {
+fn download_file(
+    link: String,
+    output_directory: &PathBuf,
+    file: Option<String>,
+) -> Result<PathBuf> {
     println!("Downloading file from {}", link);
     let response = reqwest::blocking::get(link).unwrap();
     let filepath = if let Some(name) = file {
@@ -54,12 +61,10 @@ fn download_file(link: String, output_directory: &PathBuf, file: Option<String>)
 }
 fn compress(path: &PathBuf) -> Result<()> {
     // zip the server and client folders
-    let mut zip = SevenZWriter::create(
-        path.parent().unwrap()
-        .join(
-            format!("{}.7z", path.file_name().unwrap().to_os_string().into_string().unwrap()).as_str()
-        ))?;
-    zip.push_source_path(path, |_|true)?;
+    let mut zip = SevenZWriter::create(path.parent().unwrap().join(
+        format!("{}.7z", path.file_name().unwrap().to_os_string().into_string().unwrap()).as_str(),
+    ))?;
+    zip.push_source_path(path, |_| true)?;
     zip.finish()?;
 
     Ok(())
@@ -77,10 +82,11 @@ fn main() -> Result<()> {
     println!("{:?}", config_file);
     let config_path = PathBuf::from(parsed_input.config);
     let out_dir = config_path.parent().unwrap().join(config_file.info.name);
-    if !out_dir.exists() {
-        println!("Creating output directory");
-        std::fs::create_dir_all(&out_dir)?;
+    if out_dir.exists() {
+        std::fs::remove_dir_all(&out_dir)?;
     }
+    println!("Creating output directory");
+    std::fs::create_dir_all(&out_dir)?;
     // download mods
     println!("Downloading mods into mods folder");
     fs::create_dir_all(out_dir.join("server/mods"))?;
@@ -88,35 +94,32 @@ fn main() -> Result<()> {
     fs::create_dir_all(out_dir.join("download"))?;
     for (modname, modstruct) in config_file.mods.iter() {
         println!("Downloading {}", modname);
-        let fp = download_file(
-            modstruct.link.clone(),
-            &out_dir.join("download"),
-            None,
-        )?;
+        let fp = download_file(modstruct.link.clone(), &out_dir.join("download"), None)?;
         if modstruct.server {
             fs::copy(
                 &fp,
-                out_dir.join("server/mods").join(fp.file_name().unwrap())
+                out_dir.join("server/mods").join(fp.file_name().unwrap()),
             )?;
         }
-        if modstruct.client{
+        if modstruct.client {
             fs::rename(
                 &fp,
-                out_dir.join("client/mods").join(fp.file_name().unwrap())
+                out_dir.join("client/mods").join(fp.file_name().unwrap()),
             )?;
         }
     }
     fs::remove_dir_all(out_dir.join("download"))?;
     println!("Accepting EuLA");
-    fs::write(out_dir.join("eula.txt"), "eula=true")?;
+    fs::write(out_dir.join("server").join("eula.txt"), "eula=true")?;
     let copied = out_dir.clone();
-    let thread = std::thread::spawn(move ||{
-        compress(&copied.join("server")).unwrap();
-    });
-    compress(&out_dir.join("client"))?;
-    thread.join().unwrap();
+    if parsed_input.compress.unwrap_or(false) {
+        let thread = std::thread::spawn(move || {
+            compress(&copied.join("server")).unwrap();
+        });
+        compress(&out_dir.join("client"))?;
+        thread.join().unwrap();
+    }
     // initialize the server
-    /*
     println!("Initializing server");
     let fabric_link = format!(
         "https://meta.fabricmc.net/v2/versions/loader/{}/{}/{}/server/jar",
@@ -124,11 +127,11 @@ fn main() -> Result<()> {
     );
     download_file(
         fabric_link,
-        &parsed_input.output_directory,
+        &out_dir.join("server"),
         Some("fabric.jar".to_owned()),
     )?;
     let result = std::process::Command::new("java")
-        .current_dir(parsed_input.output_directory.display().to_string().as_str())
+        .current_dir(out_dir.join("server").display().to_string().as_str())
         .arg("-Xmx2G")
         .arg("-jar")
         .arg("fabric.jar")
@@ -139,8 +142,6 @@ fn main() -> Result<()> {
     println!("{}", String::from_utf8_lossy(&result.stdout));
     println!("{}", String::from_utf8_lossy(&result.stderr));
     println!("Server initialized");
-    */
-    
 
     Ok(())
 }
