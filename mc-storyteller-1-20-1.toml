@@ -1,5 +1,5 @@
 [info]
-name = "serverside-vanilla-1-20-1"
+name = "mc-storyteller-1-20-1"
 mc_version = "1.20.1"
 loader = "0.16.0"
 launcher = "1.0.1"
@@ -57,6 +57,6 @@ origins-classes = { link = "https://cdn.modrinth.com/data/FiDptjtR/versions/EnGf
 another-furniture = {link = "https://cdn.modrinth.com/data/ulloLmqG/versions/YKKY0UDo/another_furniture-fabric-1.20.1-3.0.1.jar", version = "3.0.1", server = true, client = true}
 farmers-delight = {link = "https://cdn.modrinth.com/data/7vxePowz/versions/5dZdVy3m/FarmersDelight-1.20.1-2.1.1%2Brefabricated.jar", version = "2.1.1", server = true, client = true}
 brewin-n-chewin = {link = "https://cdn.modrinth.com/data/e4G0uSdm/versions/ZieRTW8y/brewinandchewin-3.0.6%2B1.20.1.jar", version = "3.0.6", server = true, client = true, depends_on =["farmers-delight"]}
-macaws-furniture = {link = "https://modrinth.com/mod/macaws-furniture/version/oj2le2W6", version = "3.2.2", server = true, client = true}
+macaws-furniture = {link = "https://cdn.modrinth.com/data/dtWC90iB/versions/oj2le2W6/mcw-furniture-3.2.2-mc1.20.1fabric.jar", version = "3.2.2", server = true, client = true}
 
 just-enough-items = {link = "https://cdn.modrinth.com/data/u6dRKJwZ/versions/g55mIBsI/jei-1.20.1-fabric-15.8.0.18.jar", version = "15.8.0.18", server = false, client = true}
